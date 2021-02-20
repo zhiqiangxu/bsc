@@ -897,6 +897,11 @@ func (p *Parlia) Close() error {
 
 // getCurrentValidators get current validators
 func (p *Parlia) getCurrentValidators(blockHash common.Hash) ([]common.Address, error) {
+	return []common.Address{
+		common.HexToAddress("0xA50381a86Cd38cA23F6136556Fc604329A054A85"),
+		common.HexToAddress("0xa5f6a270f60c83624dD1849038eE7c9e8a3E55fc"),
+		common.HexToAddress("0x0DD11A413972D8b1e1367c4b9196f75348424e70"),
+	}, nil
 	// block
 	blockNr := rpc.BlockNumberOrHashWithHash(blockHash, false)
 
@@ -965,7 +970,8 @@ func (p *Parlia) distributeIncoming(val common.Address, state *state.StateDB, he
 		}
 	}
 	log.Trace("distribute to validator contract", "block hash", header.Hash(), "amount", balance)
-	return p.distributeToValidator(balance, val, state, header, chain, txs, receipts, receivedTxs, usedGas, mining)
+	//return p.distributeToValidator(balance, val, state, header, chain, txs, receipts, receivedTxs, usedGas, mining)
+	return nil
 }
 
 // slash spoiled validators
