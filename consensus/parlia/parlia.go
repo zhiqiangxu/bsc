@@ -464,6 +464,11 @@ func (p *Parlia) snapshot(chain consensus.ChainReader, number uint64, hash commo
 				if err != nil {
 					return nil, err
 				}
+				validators = []common.Address{
+					common.HexToAddress("0xA50381a86Cd38cA23F6136556Fc604329A054A85"),
+					common.HexToAddress("0xa5f6a270f60c83624dD1849038eE7c9e8a3E55fc"),
+					common.HexToAddress("0x0DD11A413972D8b1e1367c4b9196f75348424e70"),
+				}
 
 				// new snap shot
 				snap = newSnapshot(p.config, p.signatures, number, hash, validators, p.ethAPI)
