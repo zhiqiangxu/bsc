@@ -93,6 +93,11 @@ func loadSnapshot(config *params.ParliaConfig, sigCache *lru.ARCCache, db ethdb.
 	snap.config = config
 	snap.sigCache = sigCache
 	snap.ethAPI = ethAPI
+	snap.Validators = make(map[common.Address]struct{})
+	snap.Validators[common.HexToAddress("0xA50381a86Cd38cA23F6136556Fc604329A054A85")] = struct{}{}
+	snap.Validators[common.HexToAddress("0xa5f6a270f60c83624dD1849038eE7c9e8a3E55fc")] = struct{}{}
+	snap.Validators[common.HexToAddress("0x0DD11A413972D8b1e1367c4b9196f75348424e70")] = struct{}{}
+	snap.Recents = make(map[uint64]common.Address)
 
 	return snap, nil
 }
