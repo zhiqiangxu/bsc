@@ -563,6 +563,10 @@ func (p *Parlia) verifySeal(chain consensus.ChainReader, header *types.Header, p
 	}
 
 	if _, ok := snap.Validators[signer]; !ok {
+		log.Info(fmt.Sprintf("verifySeal error %s, signer %s\n", errUnauthorizedValidator.Error(), signer.String()))
+		for val, _ := range snap.Validators {
+			log.Info(fmt.Sprintf("validator addr %s", val.String()))
+		}
 		return errUnauthorizedValidator
 	}
 
@@ -807,6 +811,10 @@ func (p *Parlia) Seal(chain consensus.ChainReader, block *types.Block, results c
 
 	// Bail out if we're unauthorized to sign a block
 	if _, authorized := snap.Validators[val]; !authorized {
+		log.Info(fmt.Sprintf("Seal error %s, validator %s\n", errUnauthorizedValidator.Error(), val.String()))
+		for val, _ := range snap.Validators {
+			log.Info(fmt.Sprintf("validator addr %s", val.String()))
+		}
 		return errUnauthorizedValidator
 	}
 
