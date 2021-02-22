@@ -583,10 +583,10 @@ func (p *Parlia) verifySeal(chain consensus.ChainReader, header *types.Header, p
 	if !p.fakeDiff {
 		inturn := snap.inturn(signer)
 		if inturn && header.Difficulty.Cmp(diffInTurn) != 0 {
-			return errWrongDifficulty
+			//return errWrongDifficulty
 		}
 		if !inturn && header.Difficulty.Cmp(diffNoTurn) != 0 {
-			return errWrongDifficulty
+			//return errWrongDifficulty
 		}
 	}
 
