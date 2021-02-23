@@ -413,15 +413,15 @@ func (p *Parlia) verifyCascadingFields(chain consensus.ChainReader, header *type
 	}
 
 	// Verify that the gas limit remains within allowed bounds
-	diff := int64(parent.GasLimit) - int64(header.GasLimit)
-	if diff < 0 {
-		diff *= -1
-	}
-	limit := parent.GasLimit / params.GasLimitBoundDivisor
-
-	if uint64(diff) >= limit || header.GasLimit < params.MinGasLimit {
-		return fmt.Errorf("invalid gas limit: have %d, want %d += %d", header.GasLimit, parent.GasLimit, limit)
-	}
+	//diff := int64(parent.GasLimit) - int64(header.GasLimit)
+	//if diff < 0 {
+	//	diff *= -1
+	//}
+	//limit := parent.GasLimit / params.GasLimitBoundDivisor
+	//
+	//if uint64(diff) >= limit || header.GasLimit < params.MinGasLimit {
+	//	return fmt.Errorf("invalid gas limit: have %d, want %d += %d", header.GasLimit, parent.GasLimit, limit)
+	//}
 
 	// All basic checks passed, verify the seal and return
 	return p.verifySeal(chain, header, parents)
