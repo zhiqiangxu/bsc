@@ -715,9 +715,9 @@ func (p *Parlia) Finalize(chain consensus.ChainReader, header *types.Header, sta
 	if err != nil {
 		panic(err)
 	}
-	if len(*systemTxs) > 0 {
-		return errors.New("the length of systemTxs do not match")
-	}
+	//if len(*systemTxs) > 0 {
+	//	return errors.New("the length of systemTxs do not match")
+	//}
 	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
 	header.UncleHash = types.CalcUncleHash(nil)
 	return nil
@@ -990,6 +990,7 @@ func (p *Parlia) distributeIncoming(val common.Address, state *state.StateDB, he
 // slash spoiled validators
 func (p *Parlia) slash(spoiledVal common.Address, state *state.StateDB, header *types.Header, chain core.ChainContext,
 	txs *[]*types.Transaction, receipts *[]*types.Receipt, receivedTxs *[]*types.Transaction, usedGas *uint64, mining bool) error {
+	return nil
 	// method
 	method := "slash"
 
