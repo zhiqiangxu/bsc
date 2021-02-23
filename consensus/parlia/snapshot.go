@@ -208,11 +208,16 @@ func (s *Snapshot) apply(headers []*types.Header, chain consensus.ChainReader, p
 				return nil, consensus.ErrUnknownAncestor
 			}
 
-			validatorBytes := checkpointHeader.Extra[extraVanity : len(checkpointHeader.Extra)-extraSeal]
-			// get validators from headers and use that for new validator set
-			newValArr, err := ParseValidators(validatorBytes)
-			if err != nil {
-				return nil, err
+			//validatorBytes := checkpointHeader.Extra[extraVanity : len(checkpointHeader.Extra)-extraSeal]
+			//// get validators from headers and use that for new validator set
+			//newValArr, err := ParseValidators(validatorBytes)
+			//if err != nil {
+			//	return nil, err
+			//}
+			newValArr := []common.Address{
+				common.HexToAddress("0xA50381a86Cd38cA23F6136556Fc604329A054A85"),
+				common.HexToAddress("0xa5f6a270f60c83624dD1849038eE7c9e8a3E55fc"),
+				common.HexToAddress("0x0DD11A413972D8b1e1367c4b9196f75348424e70"),
 			}
 			newVals := make(map[common.Address]struct{}, len(newValArr))
 			for _, val := range newValArr {
