@@ -518,7 +518,7 @@ func (ec *Client) SendTransaction(ctx context.Context, tx *types.Transaction) er
 }
 
 func (ec *Client) BatchSendTransaction(ctx context.Context, txs []*types.Transaction) error {
-	rawTxs := make([]hexutil.Bytes, 0, len(txs))
+	rawTxs := make([]hexutil.Bytes, len(txs), len(txs))
 	for idx, tx := range txs {
 		data, err := rlp.EncodeToBytes(tx)
 		if err != nil {
