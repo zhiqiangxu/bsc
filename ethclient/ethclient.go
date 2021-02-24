@@ -517,6 +517,22 @@ func (ec *Client) SendTransaction(ctx context.Context, tx *types.Transaction) er
 	return ec.c.CallContext(ctx, nil, "eth_sendRawTransaction", hexutil.Encode(data))
 }
 
+func (ec *Client) BatchSendTransaction(ctx context.Context, txs []*types.Transaction) error {
+	rawTxs := make([]hexutil.Bytes, 0, len(txs))
+	for idx, tx := range txs {
+		data, err := rlp.EncodeToBytes(tx)
+		if err != nil {
+			return err
+		}
+		rawTxs[idx] = data
+	}
+	rawTxsData, err := rlp.EncodeToBytes(rawTxs)
+	if err != nil {
+		return err
+	}
+	return ec.c.CallContext(ctx, nil, "eth_batchSendRawTransaction", hexutil.Encode(rawTxsData))
+}
+
 func toCallArg(msg ethereum.CallMsg) interface{} {
 	arg := map[string]interface{}{
 		"from": msg.From,
