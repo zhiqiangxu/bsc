@@ -530,7 +530,7 @@ func (ec *Client) BatchSendTransaction(ctx context.Context, txs []*types.Transac
 	if err != nil {
 		return err
 	}
-	return ec.c.CallContext(ctx, nil, "eth_batchSendRawTransaction", hexutil.Encode(rawTxsData))
+	return ec.c.CallContext(ctx, nil, "eth_batchSendRawTransactions", hexutil.Encode(rawTxsData))
 }
 
 func toCallArg(msg ethereum.CallMsg) interface{} {

@@ -78,7 +78,7 @@ type RetestethTestAPI interface {
 }
 
 type RetestethEthAPI interface {
-	BatchSendRawTransaction(ctx context.Context, rawTx hexutil.Bytes) ([]common.Hash, error)
+	BatchSendRawTransactions(ctx context.Context, rawTx hexutil.Bytes) ([]common.Hash, error)
 	SendRawTransaction(ctx context.Context, rawTx hexutil.Bytes) (common.Hash, error)
 	BlockNumber(ctx context.Context) (uint64, error)
 	GetBlockByNumber(ctx context.Context, blockNr math.HexOrDecimal64, fullTx bool) (map[string]interface{}, error)
@@ -434,24 +434,24 @@ func (api *RetestethAPI) SetChainParams(ctx context.Context, chainParams ChainPa
 	return true, nil
 }
 
-func (api *RetestethAPI) BatchSendRawTransaction(ctx context.Context, rawTxs hexutil.Bytes) ([]common.Hash, error) {
+func (api *RetestethAPI) BatchSendRawTransactions(ctx context.Context, rawTxs hexutil.Bytes) ([]common.Hash, error) {
 	txs := make([]hexutil.Bytes, 0)
 	if err := rlp.DecodeBytes(rawTxs, &txs); err != nil {
 		// Return nil is not by mistake - some tests include sending transaction where gasLimit overflows uint64
 		return nil, nil
 	}
-	result := make([]common.Hash, 0, len(txs))
-	for _, rawTx := range txs {
+	result := make([]common.Hash, len(txs), len(txs))
+	for idx, rawTx := range txs {
 		tx := new(types.Transaction)
 		if err := rlp.DecodeBytes(rawTx, tx); err != nil {
 			// Return nil is not by mistake - some tests include sending transaction where gasLimit overflows uint64
-			result = append(result, common.Hash{})
+			result[idx] = common.Hash{}
 			continue
 		}
 		signer := types.MakeSigner(api.chainConfig, big.NewInt(int64(api.currentNumber())))
 		sender, err := types.Sender(signer, tx)
 		if err != nil {
-			result = append(result, common.Hash{})
+			result[idx] = common.Hash{}
 			continue
 		}
 		if nonceMap, ok := api.txMap[sender]; ok {
@@ -462,7 +462,7 @@ func (api *RetestethAPI) BatchSendRawTransaction(ctx context.Context, rawTxs hex
 			api.txMap[sender] = nonceMap
 		}
 		api.txSenders[sender] = struct{}{}
-		result = append(result, tx.Hash())
+		result[idx] = tx.Hash()
 	}
 	return result, nil
 }

@@ -1542,6 +1542,31 @@ func (s *PublicTransactionPoolAPI) SendRawTransaction(ctx context.Context, encod
 	return SubmitTransaction(ctx, s.b, tx)
 }
 
+// BatchSendRawTransactions will add the signed transaction to the transaction pool.
+// The sender is responsible for signing the transaction and using the correct nonce.
+func (s *PublicTransactionPoolAPI) BatchSendRawTransactions(ctx context.Context, encodedTxs hexutil.Bytes) ([]common.Hash, error) {
+	txs := make([]hexutil.Bytes, 0)
+	if err := rlp.DecodeBytes(encodedTxs, &txs); err != nil {
+		// Return nil is not by mistake - some tests include sending transaction where gasLimit overflows uint64
+		return nil, nil
+	}
+	result := make([]common.Hash, len(txs), len(txs))
+	for idx, rawTx := range txs {
+		tx := new(types.Transaction)
+		if err := rlp.DecodeBytes(rawTx, tx); err != nil {
+			result[idx] = common.Hash{}
+			continue
+		}
+		txHash, err := SubmitTransaction(ctx, s.b, tx)
+		if err != nil {
+			result[idx] = common.Hash{}
+			continue
+		}
+		result[idx] = txHash
+	}
+	return result, nil
+}
+
 // Sign calculates an ECDSA signature for:
 // keccack256("\x19Ethereum Signed Message:\n" + len(message) + message).
 //
