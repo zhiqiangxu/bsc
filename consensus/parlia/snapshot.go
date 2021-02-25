@@ -21,7 +21,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"math/big"
 	"sort"
 
@@ -30,7 +29,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethdb"
 	"github.com/ethereum/go-ethereum/internal/ethapi"
-	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/params"
 	lru "github.com/hashicorp/golang-lru"
 )
@@ -188,13 +186,13 @@ func (s *Snapshot) apply(headers []*types.Header, chain consensus.ChainReader, p
 		if err != nil {
 			return nil, err
 		}
-		if _, ok := snap.Validators[validator]; !ok {
-			log.Info(fmt.Sprintf("apply error %s, validator %s\n", errUnauthorizedValidator.Error(), validator.String()))
-			for val, _ := range snap.Validators {
-				log.Info(fmt.Sprintf("validator addr %s", val.String()))
-			}
-			//return nil, errUnauthorizedValidator
-		}
+		//if _, ok := snap.Validators[validator]; !ok {
+		//	log.Info(fmt.Sprintf("apply error %s, validator %s\n", errUnauthorizedValidator.Error(), validator.String()))
+		//	for val, _ := range snap.Validators {
+		//		log.Info(fmt.Sprintf("validator addr %s", val.String()))
+		//	}
+		//return nil, errUnauthorizedValidator
+		//}
 		for _, recent := range snap.Recents {
 			if recent == validator {
 				return nil, errRecentlySigned

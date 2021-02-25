@@ -679,10 +679,10 @@ func (p *Parlia) Finalize(chain consensus.ChainReader, header *types.Header, sta
 			copy(validatorsBytes[i*validatorBytesLength:], validator.Bytes())
 		}
 
-		extraSuffix := len(header.Extra) - extraSeal
-		if !bytes.Equal(header.Extra[extraVanity:extraSuffix], validatorsBytes) {
-			return errMismatchingEpochValidators
-		}
+		//extraSuffix := len(header.Extra) - extraSeal
+		//if !bytes.Equal(header.Extra[extraVanity:extraSuffix], validatorsBytes) {
+		//	return errMismatchingEpochValidators
+		//}
 	}
 	// No block rewards in PoA, so the state remains as is and uncles are dropped
 	cx := chainContext{Chain: chain, parlia: p}
